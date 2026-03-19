@@ -1,0 +1,34 @@
+{
+  "success": true,
+  "evidence_path": "C:\\Users\\Recep\\Desktop\\Dijital-iz-Driver-TR\\tests\\synthetic_android_backup",
+  "stats": {
+    "whatsapp_rows": 1,
+    "sms_rows": 0,
+    "contacts_rows": 0,
+    "browser_history_rows": 0,
+    "call_log_rows": 0,
+    "location_rows": 0,
+    "carving_rows": 0,
+    "sqlite_files": 0
+  },
+  "whatsapp_messages": [
+    {
+      "source_db": "/synthetic/msgstore.db",
+      "jid": "905551234567@s.whatsapp.net",
+      "sender_jid": "905551234567@s.whatsapp.net",
+      "chat_jid": "905551234567@s.whatsapp.net",
+      "body": "Sunucu canlı. C2 Server IP: 198.51.100.77 — payload'u buraya POST et, port 4444 açık.",
+      "timestamp_iso": "2025-03-19T13:12:00+00:00",
+      "from_me": false
+    }
+  ],
+  "sms_messages": [],
+  "contacts": [],
+  "browser_history": [],
+  "call_logs": [],
+  "locations": [],
+  "carving_findings": [],
+  "sqlite_files_scanned": 0,
+  "filesystem_targets": {},
+  "errors": []
+}

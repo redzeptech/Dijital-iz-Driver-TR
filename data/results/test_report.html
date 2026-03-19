@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dijital İz Sürücü - Analiz Özeti</title>
+    <style>
+        :root {
+            --bg: #0f1419;
+            --surface: #1a1f26;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --critical: #f85149;
+            --high: #da3633;
+            --medium: #d29922;
+            --low: #9e6a03;
+            --info: #388bfd;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 2rem;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header {
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--text);
+        }
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+        .meta {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #21262d;
+        }
+        th {
+            background: #161b22;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+        tr:hover { background: #21262d; }
+        .level-critical { background: rgba(248, 81, 73, 0.15); }
+        .level-high { background: rgba(218, 54, 51, 0.12); }
+        .level-medium { background: rgba(210, 153, 34, 0.1); }
+        .level-low { background: rgba(158, 106, 3, 0.15); }
+        .level-info { background: transparent; }
+        .level-badge {
+            display: inline-block;
+            padding: 0.2em 0.5em;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-critical { background: var(--critical); color: #fff; }
+        .badge-high { background: var(--high); color: #fff; }
+        .badge-medium { background: var(--medium); color: #000; }
+        .badge-low { background: var(--low); color: #fff; }
+        .badge-info { background: #21262d; color: var(--text-muted); }
+        .details-cell { max-width: 400px; font-size: 0.9rem; }
+        footer {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #30363d;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dijital İz Sürücü - Analiz Özeti</h1>
+            <p class="subtitle">Hayabusa + Chainsaw Korelasyon Raporu</p>
+            <div class="meta">
+                <span>Oluşturulma: 2026-03-19 22:21:21</span>
+                <span>Toplam olay: 2</span>
+            </div>
+        </header>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Seviye</th>
+                    <th>Kural / Başlık</th>
+                    <th>Detay</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr class="level-critical">
+                    <td>2024-01-01 10:00</td>
+                    <td><span class="level-badge badge-critical">critical</span></td>
+                    <td>Brute Force</td>
+                    <td class="details-cell">Failed logon</td>
+                </tr>
+                
+                <tr class="level-low">
+                    <td>2024-01-01 10:05</td>
+                    <td><span class="level-badge badge-low">low</span></td>
+                    <td>Suspicious</td>
+                    <td class="details-cell">Info</td>
+                </tr>
+                
+            </tbody>
+        </table>
+
+        <footer>
+            Dijital İz Sürücü (DİZ) - Plaso / Timesketch tarzı rapor
+        </footer>
+    </div>
+</body>
+</html>

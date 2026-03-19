@@ -1,0 +1,4 @@
+Timestamp,Level,RuleTitle,Details
+2024-01-01,high,Test,x
+2024-01-02,low,Test2,y
+2024-01-03,critical,Test3,z

@@ -1,0 +1,10 @@
+{
+  "storyline": "Örnek: Keşif fazı WhatsApp ile doğrulandı; sızma PowerShell 4104 ile sabit.",
+  "mitre": "Örnek: T1078 ve T1567 teknikleri rapor tablosu ile çapraz kontrol edildi.",
+  "expert": "Örnek: Üçüncü taraf IOC ile eşleşme bekleniyor.",
+  "critical": "Örnek: Üçlü korelasyon mahkeme sunumunda öncelik 1.",
+  "attack_map": "Örnek: Swimlane üzerinde boşluk = log gap; Volatility tekrar önerilir.",
+  "timeline": "Örnek: Plotly ekseni UTC varsayımı — yerel saat için analist düzeltmesi.",
+  "events_table": "Örnek: ÇAKIŞMA satırlarında aynı PID üzerinden teyit alındı.",
+  "artifact_seal": "Örnek: Zincir-of-custody için hash değerleri TS ile imzalandı."
+}

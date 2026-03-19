@@ -1,0 +1,5 @@
+Timestamp,Level,RuleTitle,Details,IpAddress
+1,high,Brute Force,x,192.168.1.100
+2,high,Brute Force,y,192.168.1.100
+3,med,Suspicious Login,z,10.0.0.5
+4,low,Brute Force,a,192.168.1.100

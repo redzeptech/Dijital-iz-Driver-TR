@@ -1,0 +1,83 @@
+{
+  "success": true,
+  "source_path": "C:\\Users\\Recep\\Desktop\\Dijital-iz-Driver-TR\\tests\\case_study_generator.py",
+  "stats": {
+    "raw_records_seen": 1,
+    "normalized_events": 1,
+    "critical_events": 1,
+    "bulut_sizintisi_events": 1,
+    "hybrid_attack_events": 1,
+    "suspicious_network_ips": 1,
+    "network_ips_for_correlation": 1
+  },
+  "critical_events": [
+    {
+      "cloud": "aws",
+      "event_time": "2025-03-19T13:25:07Z",
+      "event_name": "DeleteSnapshot",
+      "event_source": "ec2.amazonaws.com",
+      "source_ip": "198.51.100.77",
+      "user_arn": "arn:aws:iam::999888777666:root",
+      "privilege_summary": "ROOT hesabı — tam yönetici (yüksek risk)",
+      "raw_summary": "DeleteSnapshot (EBS snapshot) from 198.51.100.77 as Root",
+      "critical": true,
+      "status_normalized": "Success",
+      "Timestamp": "2025-03-19T13:25:07Z",
+      "User_Identity": "ROOT hesabı — tam yönetici (yüksek risk)",
+      "Action": "DeleteSnapshot",
+      "Source_IP": "198.51.100.77",
+      "Status": "Success",
+      "bulut_sizintisi": true,
+      "bulut_sizintisi_reason": "BULUT SIZINTISI: Oturum IP’si, Zeek/Tshark **şüpheli** listesinde (beaconing / DNS tünelleme).",
+      "hybrid_attack": true,
+      "hybrid_reason": "BULUT SIZINTISI: Oturum IP’si, Zeek/Tshark **şüpheli** listesinde (beaconing / DNS tünelleme)."
+    }
+  ],
+  "bulut_sizintisi": [
+    {
+      "cloud": "aws",
+      "event_time": "2025-03-19T13:25:07Z",
+      "event_name": "DeleteSnapshot",
+      "event_source": "ec2.amazonaws.com",
+      "source_ip": "198.51.100.77",
+      "user_arn": "arn:aws:iam::999888777666:root",
+      "privilege_summary": "ROOT hesabı — tam yönetici (yüksek risk)",
+      "raw_summary": "DeleteSnapshot (EBS snapshot) from 198.51.100.77 as Root",
+      "critical": true,
+      "status_normalized": "Success",
+      "Timestamp": "2025-03-19T13:25:07Z",
+      "User_Identity": "ROOT hesabı — tam yönetici (yüksek risk)",
+      "Action": "DeleteSnapshot",
+      "Source_IP": "198.51.100.77",
+      "Status": "Success",
+      "bulut_sizintisi": true,
+      "bulut_sizintisi_reason": "BULUT SIZINTISI: Oturum IP’si, Zeek/Tshark **şüpheli** listesinde (beaconing / DNS tünelleme).",
+      "hybrid_attack": true,
+      "hybrid_reason": "BULUT SIZINTISI: Oturum IP’si, Zeek/Tshark **şüpheli** listesinde (beaconing / DNS tünelleme)."
+    }
+  ],
+  "hybrid_attacks": [
+    {
+      "cloud": "aws",
+      "event_time": "2025-03-19T13:25:07Z",
+      "event_name": "DeleteSnapshot",
+      "event_source": "ec2.amazonaws.com",
+      "source_ip": "198.51.100.77",
+      "user_arn": "arn:aws:iam::999888777666:root",
+      "privilege_summary": "ROOT hesabı — tam yönetici (yüksek risk)",
+      "raw_summary": "DeleteSnapshot (EBS snapshot) from 198.51.100.77 as Root",
+      "critical": true,
+      "status_normalized": "Success",
+      "Timestamp": "2025-03-19T13:25:07Z",
+      "User_Identity": "ROOT hesabı — tam yönetici (yüksek risk)",
+      "Action": "DeleteSnapshot",
+      "Source_IP": "198.51.100.77",
+      "Status": "Success",
+      "bulut_sizintisi": true,
+      "bulut_sizintisi_reason": "BULUT SIZINTISI: Oturum IP’si, Zeek/Tshark **şüpheli** listesinde (beaconing / DNS tünelleme).",
+      "hybrid_attack": true,
+      "hybrid_reason": "BULUT SIZINTISI: Oturum IP’si, Zeek/Tshark **şüpheli** listesinde (beaconing / DNS tünelleme)."
+    }
+  ],
+  "errors": []
+}

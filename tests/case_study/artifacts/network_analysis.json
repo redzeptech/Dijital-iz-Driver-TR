@@ -1,0 +1,38 @@
+{
+  "http_traffic": [],
+  "dns_queries": [],
+  "dns_tunneling_suspicious": [],
+  "connections": [
+    {
+      "id.orig_h": "192.168.1.50",
+      "id.resp_h": "198.51.100.77",
+      "id.orig_p": 49152,
+      "id.resp_p": 4444,
+      "proto": "tcp",
+      "service": "",
+      "duration": 3600.0,
+      "orig_bytes": 524288000,
+      "resp_bytes": 65536,
+      "conn_state": "S1",
+      "ts": "2025-03-19T13:20:00Z"
+    }
+  ],
+  "beaconing_suspicious": [
+    {
+      "id.orig_h": "192.168.1.50",
+      "id.resp_h": "198.51.100.77",
+      "id.orig_p": 49152,
+      "id.resp_p": 4444,
+      "proto": "tcp",
+      "service": "",
+      "duration": 3600.0,
+      "orig_bytes": 524288000,
+      "resp_bytes": 65536,
+      "conn_state": "S1",
+      "ts": "2025-03-19T13:20:00Z",
+      "beaconing_suspicious": true,
+      "unusual_port": 4444
+    }
+  ],
+  "suspicious_files": []
+}

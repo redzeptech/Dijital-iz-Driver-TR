@@ -1,0 +1,7 @@
+Timestamp,Source_Tool,Event_Type,Description,Severity
+2024-01-15 09:50:00,Zeek,Zeek_conn,Connection 192.168.1.1: -> 10.0.0.1: (tcp ),informational
+2024-01-15 09:50:01,Zeek,Zeek_conn,Connection 192.168.1.2: -> 8.8.8.8: (tcp ),informational
+2024-01-15 10:00:00,Hayabusa,Event,Suspicious Process: Suspicious activity detected,high
+2024-01-15 10:05:00,Hayabusa,Event,Logon: User logged in,informational
+2024-01-15 10:10:00,Plaso,filestat,File created,informational
+2024-01-15 10:11:00,Plaso,winreg,Registry modified,informational

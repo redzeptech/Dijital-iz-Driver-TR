@@ -1,0 +1,8 @@
+[
+  {
+    "Timestamp": "2025-03-19 13:18:33",
+    "Level": "high",
+    "RuleTitle": "Suspicious PowerShell Download (Invoke-WebRequest)",
+    "Details": "CommandLine contains Invoke-WebRequest downloading payload from http://198.51.100.77:8080/stage2.ps1; Parent: powershell.exe; ProcessId: 4840; NewProcessId: 4840; Image: powershell.exe; Same session shows defense evasion staging (MITRE T1562 telemetry)."
+  }
+]

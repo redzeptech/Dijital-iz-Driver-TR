@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
+    <style>
+        :root {
+            --bg: #0a1628;
+            --surface: #111d2e;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #00f0ff;
+            --critical: #f85149;
+            --high: #da3633;
+            --medium: #d29922;
+            --low: #9e6a03;
+            --info: #388bfd;
+            --gold: #f0b429;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'IBM Plex Sans', -apple-system, sans-serif;
+            background: linear-gradient(180deg, var(--bg) 0%, #050a12 100%);
+            color: var(--text);
+            line-height: 1.55;
+            margin: 0;
+            padding: 0;
+        }
+        .container { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
+        .cover {
+            border: 1px solid #1e3a5f;
+            border-radius: 12px;
+            padding: 2rem 2.25rem;
+            background: linear-gradient(135deg, rgba(0,240,255,0.06), rgba(31,111,235,0.08));
+            margin-bottom: 2rem;
+        }
+        .cover-integrity {
+            margin-top: 1.15rem;
+            padding: 1rem 1.15rem;
+            border-radius: 10px;
+            border: 1px solid rgba(126, 231, 135, 0.45);
+            background: rgba(6, 78, 59, 0.22);
+            font-size: 0.82rem;
+            color: #c9d1d9;
+            line-height: 1.5;
+        }
+        .cover-integrity strong {
+            display: block;
+            color: #7ee787;
+            font-size: 0.76rem;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .cover-integrity code {
+            display: block;
+            margin-top: 0.35rem;
+            word-break: break-all;
+            font-family: ui-monospace, Consolas, monospace;
+            font-size: 0.78rem;
+            color: #f0b429;
+        }
+        h1 {
+            font-size: 1.85rem;
+            font-weight: 700;
+            margin: 0 0 0.35rem 0;
+            letter-spacing: -0.02em;
+        }
+        .subtitle { color: var(--text-muted); font-size: 0.95rem; max-width: 720px; }
+        .meta-row {
+            display: flex; flex-wrap: wrap; gap: 1.25rem;
+            margin-top: 1.25rem; font-size: 0.82rem; color: var(--text-muted);
+        }
+        .kvkk {
+            margin-top: 1rem;
+            padding: 0.85rem 1rem;
+            background: rgba(240, 180, 41, 0.08);
+            border-left: 4px solid var(--gold);
+            border-radius: 6px;
+            font-size: 0.82rem;
+            color: #c9d1d9;
+        }
+        .attribution {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            font-style: italic;
+        }
+        h2.section-title {
+            font-size: 1.15rem;
+            color: var(--accent);
+            border-bottom: 2px solid #1e3a5f;
+            padding-bottom: 0.5rem;
+            margin: 2.25rem 0 1rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .critical-intro {
+            background: linear-gradient(90deg, rgba(248,81,73,0.2), transparent);
+            border: 1px solid rgba(248,81,73,0.45);
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .critical-intro h2 { margin: 0 0 0.75rem 0; color: #ff7b72; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.04em; }
+        .corr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        .corr-card {
+            background: var(--surface);
+            border: 1px solid #21262d;
+            border-radius: 10px;
+            padding: 1rem 1.15rem;
+        }
+        .corr-card h3 { margin: 0 0 0.5rem 0; font-size: 0.88rem; color: var(--accent); text-transform: uppercase; }
+        .corr-card .count { font-size: 1.5rem; font-weight: 800; color: #fff; }
+        .attack-map-wrap {
+            background: var(--surface);
+            border: 1px solid #1e3a5f;
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin: 1rem 0 2rem;
+            overflow-x: auto;
+        }
+        .attack-map-wrap h3 { margin: 0 0 0.75rem 0; font-size: 1rem; color: var(--text); }
+        .attack-window { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; }
+        .swim-row { display: flex; align-items: center; min-height: 44px; border-bottom: 1px solid #21262d; position: relative; }
+        .swim-label { width: 200px; flex-shrink: 0; font-size: 0.78rem; color: var(--accent); font-weight: 600; }
+.swim-track { flex: 1; height: 36px; background: linear-gradient(90deg, #0d1117, #161b22); border-radius: 6px; position: relative; margin: 4px 0; }
+        .swim-marker {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 11px; height: 11px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            cursor: help;
+        }
+        .swim-marker.level-critical { background: var(--critical); box-shadow: 0 0 10px rgba(248,81,73,0.7); }
+        .swim-marker.level-high { background: var(--high); }
+        .swim-marker.level-medium { background: var(--medium); }
+        .swim-marker.level-low { background: var(--low); }
+        .swim-marker.level-info { background: var(--info); }
+        .marker-tip { font-size: 0.65rem; position: absolute; top: -28px; left: 50%; transform: translateX(-50%); white-space: nowrap; background: #21262d; padding: 2px 6px; border-radius: 4px; opacity: 0; pointer-events: none; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+        .swim-marker:hover .marker-tip { opacity: 1; }
+        #timeline-plot { width: 100%; min-height: 420px; border-radius: 10px; overflow: hidden; border: 1px solid #1e3a5f; }
+        .plot-fallback { font-size: 0.85rem; color: var(--text-muted); padding: 1rem; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface);
+            border-radius: 8px;
+            overflow: hidden;
+            font-size: 0.88rem;
+        }
+        th, td { padding: 0.65rem 0.85rem; text-align: left; border-bottom: 1px solid #21262d; }
+        th {
+            background: #0d1117;
+            font-weight: 600;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+        tr:hover { background: #1c2333; }
+        .level-critical { background: rgba(248, 81, 73, 0.12); }
+        .level-high { background: rgba(218, 54, 51, 0.1); }
+        .level-medium { background: rgba(210, 153, 34, 0.08); }
+        .level-low { background: rgba(210, 180, 0, 0.1); }
+        .high-alert { background: rgba(248, 81, 73, 0.28) !important; border-left: 4px solid #f85149; }
+        .confirmed-threat { background: linear-gradient(90deg, rgba(248, 81, 73, 0.4), rgba(248, 81, 73, 0.15)) !important; border-left: 6px solid #f0b429; }
+        .exfiltration-threat { background: rgba(127, 29, 29, 0.35) !important; border-left: 4px solid #f87171; }
+        .account-takeover-threat { background: rgba(91, 33, 182, 0.35) !important; border-left: 5px solid #fbbf24; }
+        .full-spectrum-threat { background: linear-gradient(90deg, rgba(127,29,29,0.5), rgba(30,58,95,0.4)) !important; border-left: 6px solid #f87171; }
+        .technical-summary { background: #0d1117; border: 1px solid #21262d; border-radius: 8px; padding: 1rem 1.25rem; margin: 0.75rem 0; font-size: 0.85rem; }
+        .technical-summary h4 { margin: 0 0 0.5rem 0; color: #58a6ff; font-size: 0.9rem; }
+        .banner { padding: 1rem 1.25rem; border-radius: 8px; margin: 1rem 0; font-weight: 700; font-size: 0.92rem; }
+        .banner-fs { background: linear-gradient(135deg, #7f1d1d, #1e3a5f); border: 3px solid #f87171; }
+        .banner-ato { background: linear-gradient(135deg, #3b0764, #6b21a8); border: 3px solid #fbbf24; }
+        .banner-exfil { background: linear-gradient(135deg, #7f1d1d, #991b1b); border: 2px solid #f87171; }
+        .banner-conf { background: linear-gradient(135deg, #b91c1c, #dc2626); border: 2px solid #fbbf24; }
+        .alignment-pre { white-space: pre-wrap; font-size: 0.8rem; color: #c9d1d9; background: #0d1117; padding: 1rem; border-radius: 8px; border: 1px solid #21262d; }
+        table.evidence-matrix { margin: 1rem 0 1.5rem; font-size: 0.86rem; }
+        table.evidence-matrix th { background: #1a2332; color: var(--accent); border-bottom: 2px solid #00f0ff33; }
+        table.evidence-matrix td:first-child { font-weight: 600; color: #7ee7ff; width: 11%; white-space: nowrap; }
+        table.evidence-matrix td:nth-child(2) { color: #c9d1d9; max-width: 420px; }
+        table.evidence-matrix td.decision { color: #f0b429; font-weight: 600; }
+        section.mitre-matrix { margin: 0 0 2rem 0; padding: 1.35rem 1.5rem; border-radius: 12px; border: 1px solid #1e3a5f; background: linear-gradient(135deg, rgba(88,166,255,0.06), rgba(0,240,255,0.05)); }
+        section.mitre-matrix h2 { margin: 0 0 0.75rem 0; font-size: 1.05rem; color: #58a6ff; letter-spacing: 0.04em; text-transform: uppercase; }
+        section.mitre-matrix .mitre-bar-wrap { height: 28px; border-radius: 8px; background: #161b22; border: 1px solid #30363d; overflow: hidden; margin: 0.75rem 0 0.5rem; }
+        section.mitre-matrix .mitre-bar-fill { height: 100%; background: linear-gradient(90deg, #238636, #d29922, #da3633); min-width: 2px; transition: width 0.35s ease; }
+        section.mitre-matrix .mitre-meta { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.35rem; }
+        section.mitre-matrix .mitre-tactic-pill { display: inline-block; font-size: 0.68rem; padding: 0.12rem 0.45rem; margin: 0.2rem 0.35rem 0 0; border-radius: 999px; background: #21262d; border: 1px solid #30363d; color: #8b949e; }
+        section.expert-opinions { margin: 0 0 2rem 0; padding: 1.35rem 1.5rem; border-radius: 12px; border: 1px solid #30363d; background: linear-gradient(135deg, rgba(168,85,247,0.08), rgba(31,111,235,0.06)); }
+        section.expert-opinions h2 { margin: 0 0 0.65rem 0; font-size: 1.05rem; color: #c4b5fd; letter-spacing: 0.04em; text-transform: uppercase; }
+        .expert-card { background: #111d2e; border: 1px solid #21262d; border-radius: 10px; padding: 1rem 1.15rem; margin: 0.75rem 0; }
+        .expert-badge { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 6px; margin-bottom: 0.5rem; text-transform: uppercase; }
+        .expert-badge-fp { background: rgba(56,139,253,0.25); color: #58a6ff; border: 1px solid #388bfd55; }
+        .expert-badge-crit { background: rgba(248,81,73,0.22); color: #ff7b72; border: 1px solid #f8514966; }
+        .expert-badge-note { background: rgba(210,153,34,0.2); color: #e3b341; border: 1px solid #d2992255; }
+        .expert-snap { font-size: 0.8rem; color: #8b949e; margin: 0.35rem 0; }
+        .expert-comment { font-size: 0.88rem; color: #c9d1d9; margin-top: 0.5rem; border-left: 3px solid #a855f7; padding-left: 0.75rem; }
+        .mitre-cell { font-size: 0.72rem; vertical-align: top; max-width: 140px; }
+        .mitre-chip { display: inline-block; margin: 0.1rem 0.25rem 0.1rem 0; padding: 0.08rem 0.35rem; border-radius: 4px; background: #1a2332; color: #7ee7ff; border: 1px solid #00f0ff44; font-family: ui-monospace, Consolas, monospace; font-size: 0.68rem; }
+        /* Storyline bundle — Magnet / SANS rapor disiplini */
+        section.storyline-report {
+            margin: 0 0 2.25rem 0;
+            padding: 1.5rem 1.65rem;
+            border-radius: 12px;
+            border: 1px solid #1e3a5f;
+            background: linear-gradient(165deg, rgba(15,23,42,0.92) 0%, rgba(10,22,40,0.88) 100%);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+        }
+        .storyline-heading { margin-top: 0 !important; }
+        .storyline-deck { font-size: 0.86rem; color: #c9d1d9; line-height: 1.55; margin: 0 0 1.25rem 0; max-width: 920px; }
+        .storyline-block { margin-bottom: 1.75rem; }
+        .storyline-block:last-child { margin-bottom: 0; }
+        .storyline-sub {
+            margin: 0 0 0.45rem 0;
+            font-size: 0.98rem;
+            color: #7dd3fc;
+            letter-spacing: 0.02em;
+        }
+        .storyline-caption { font-size: 0.78rem; color: var(--text-muted); margin: 0 0 0.85rem 0; }
+        .storyline-narrative-box {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            font-size: 0.9rem;
+            color: #e6edf3;
+            line-height: 1.58;
+        }
+        .story-p { margin: 0 0 0.75rem 0; }
+        .story-p:last-child { margin-bottom: 0; }
+        .kill-chain-3-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: stretch;
+            gap: 8px;
+            margin: 0.5rem 0 0.35rem 0;
+        }
+        .kill-chain-3-step {
+            flex: 1 1 120px;
+            text-align: center;
+            padding: 12px 10px;
+            border-radius: 10px;
+            background: #111d2e;
+            border: 1px solid #30363d;
+        }
+        .kill-chain-3-step.kc3-done { border-color: rgba(16,185,129,0.55); background: rgba(6,78,59,0.18); }
+        .kill-chain-3-step.kc3-cur { border-color: #00bcf2; box-shadow: 0 0 0 1px rgba(0,188,242,0.35); }
+        .kc3-mark { display: block; font-size: 1.1rem; margin-bottom: 4px; color: #64748b; }
+        .kc3-done .kc3-mark { color: #34d399; font-weight: 800; }
+        .kc3-cur .kc3-mark { color: #00bcf2; }
+        .kc3-lbl { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #cbd5e1; }
+        .kc3-connector {
+            flex: 0 0 24px;
+            align-self: center;
+            height: 4px;
+            background: #30363d;
+            border-radius: 3px;
+            min-width: 12px;
+        }
+        .kc3-connector.kc3-on { background: linear-gradient(90deg, #059669, #00bcf2); }
+        .kill-chain-foot { font-size: 0.78rem; color: var(--text-muted); margin: 0.5rem 0 0 0; line-height: 1.45; }
+        .vtimeline { position: relative; margin: 0.25rem 0 0 8px; padding-left: 8px; border-left: 3px solid rgba(0,188,242,0.45); }
+        .vt-item { position: relative; display: flex; gap: 12px; margin: 0 0 1.1rem 0; padding-left: 6px; }
+        .vt-glyph {
+            position: absolute;
+            left: -26px;
+            top: 4px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #0d1117;
+            border: 2px solid #00bcf2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 12px rgba(0,188,242,0.2);
+        }
+        .vt-ico { font-size: 14px; line-height: 1; }
+        .vt-card {
+            flex: 1;
+            background: #111d2e;
+            border: 1px solid #21262d;
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+        .vt-meta { font-size: 0.7rem; color: #94a3b8; margin-bottom: 4px; }
+        .vt-lane { font-weight: 700; color: #7dd3fc; }
+        .vt-title { font-size: 0.86rem; font-weight: 600; color: #e6edf3; }
+        .vt-detail { font-size: 0.78rem; color: #8b949e; margin-top: 4px; line-height: 1.4; }
+        .vt-item.level-critical .vt-card { border-left: 4px solid #f85149; }
+        .vt-item.level-high .vt-card { border-left: 4px solid #da3633; }
+        .relationship-wrap {
+            background: #0a0f18;
+            border: 1px solid #1e3a5f;
+            border-radius: 10px;
+            padding: 12px;
+        }
+        .level-badge { display: inline-block; padding: 0.15em 0.45em; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+        .badge-critical { background: var(--critical); color: #fff; }
+        .badge-high { background: var(--high); color: #fff; }
+        .badge-medium { background: var(--medium); color: #000; }
+        .badge-low { background: #d4a500; color: #000; }
+        .badge-info { background: #21262d; color: var(--text-muted); }
+        .details-cell { max-width: 420px; }
+        footer { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid #21262d; font-size: 0.78rem; color: var(--text-muted); }
+        /* Kritik çakışma (Disk + RAM aynı artifakt) — olay tablosu */
+        tr.disk-ram-collision {
+            font-weight: 700 !important;
+            border: 2px solid #f85149 !important;
+            box-shadow: inset 0 0 0 1px rgba(248,81,73,0.45);
+            background: rgba(69, 10, 10, 0.35) !important;
+        }
+        tr.disk-ram-collision td { color: #fecaca !important; }
+        .collision-strip {
+            display: inline-block;
+            font-size: 0.62rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            padding: 0.1rem 0.35rem;
+            border-radius: 4px;
+            background: #7f1d1d;
+            color: #fecaca;
+            margin-right: 0.35rem;
+            vertical-align: middle;
+        }
+        /* Adli özet / analist notu */
+        .analyst-note-box {
+            margin: 1rem 0 0 0;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px dashed rgba(148, 163, 184, 0.55);
+            background: rgba(15, 23, 42, 0.65);
+        }
+        .analyst-note-h {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #f0b429;
+            margin-bottom: 0.45rem;
+        }
+        .analyst-note-body { font-size: 0.82rem; color: #cbd5e1; line-height: 1.5; min-height: 1.5rem; }
+        .analyst-placeholder { color: #64748b; font-style: italic; }
+        /* Hikaye akışı */
+        ul.story-flow-list {
+            list-style: none;
+            margin: 0.5rem 0 0 0;
+            padding: 0 0 0 4px;
+            border-left: 3px solid rgba(0, 188, 242, 0.45);
+        }
+        ul.story-flow-list li {
+            margin: 0 0 0.65rem 0;
+            padding: 0.5rem 0.65rem;
+            background: #0d1117;
+            border: 1px solid #21262d;
+            border-radius: 8px;
+            font-size: 0.86rem;
+            color: #e6edf3;
+            line-height: 1.45;
+        }
+        /* Kanıt doğrulama tablosu (ham JSON/CSV) */
+        section.artifact-seal-section {
+            margin: 2.5rem 0 1.5rem 0;
+            padding: 1.35rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #1e3a5f;
+            background: linear-gradient(180deg, #0d1520 0%, #0a0f14 100%);
+            page-break-inside: avoid;
+        }
+        section.artifact-seal-section h2 {
+            margin: 0 0 0.65rem 0;
+            font-size: 1.05rem;
+            color: #7ee787;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        table.artifact-hash-table { font-size: 0.7rem; font-family: ui-monospace, Consolas, monospace; }
+        table.artifact-hash-table th { white-space: nowrap; }
+        table.artifact-hash-table td.sha-cell { word-break: break-all; color: #f0b429; }
+        @media print {
+            body { background: #fff; color: #000; }
+            .cover, .attack-map-wrap, table { border-color: #ccc; }
+            #timeline-plot { min-height: 200px; }
+        }
+    </style>
+</head>
+<body>
+{% macro analyst_note_block(note_key) %}
+<div class="analyst-note-box">
+    <div class="analyst-note-h">Adli özet — Analist notu</div>
+    <div class="analyst-note-body">
+        {% if section_analyst_notes.get(note_key) %}{{ section_analyst_notes.get(note_key) }}{% else %}<span class="analyst-placeholder">Triyaj / dava sunumu öncesi yorumunuzu buraya ekleyebilirsiniz (isteğe bağlı: <code>data/results/report_section_notes.json</code> içinde &quot;{{ note_key }}&quot; anahtarı).</span>{% endif %}
+    </div>
+</div>
+{% endmacro %}
+    <div class="container">
+        <div class="cover">
+            <h1>{{ title }}</h1>
+            <p class="subtitle">{{ subtitle }}</p>
+            <div class="meta-row">
+                <span>Rapor zamanı: <strong>{{ generated_at }}</strong></span>
+                <span>Olay satırı: <strong>{{ events|length }}</strong></span>
+                {% if full_spectrum_threats %}<span>Tam-Saha (4 kanat): <strong>{{ full_spectrum_threats|length }}</strong></span>{% endif %}
+                {% if exfiltration_threats %}<span>Üçlü (Exfil): <strong>{{ exfiltration_threats|length }}</strong></span>{% endif %}
+                {% if confirmed_threats %}<span>Disk+RAM: <strong>{{ confirmed_threats|length }}</strong></span>{% endif %}
+            </div>
+            <div class="cover-integrity" id="kapak-butunluk-ozeti">
+                <strong>SHA-256 doğrulama özeti (kapak)</strong>
+                <span><strong>Ham kanıt manifest özeti:</strong> Aşağıdaki değer, bu raporda tablolanan tüm JSON/CSV dosya özetlerinin sıralı birleşiminden türetilmiş tek SHA-256 parmak izidir (satır bazlı liste: <em>Bütünlük mührü — Kanıt doğrulama tablosu</em>).</span>
+                <code>{{ cover_manifest_sha256 }}</code>
+                <span style="display:block;margin-top:0.65rem;font-size:0.78rem;color:#94a3b8;">Bu HTML çıktısının kendisi, rapor sonundaki <strong>Rapor Doğrulama Özeti — Dijital İmza (SHA-256)</strong> bloğunda ayrıca özetlenir; iki özet farklı amaçlara hizmet eder (ham artifact vs. rapor gövdesi).</span>
+            </div>
+            <div class="kvkk"><strong>KVKK</strong> — {{ kvkk_notice }}</div>
+            <p class="attribution">Rapor kalite hedefi: Magnet AXIOM ve Oxygen Forensics seviyesinde okunabilirlik, kanıt zinciri ve çoklu korelasyon özeti.</p>
+        </div>
+
+        <section class="storyline-report" id="storyline-bundle" aria-label="Storyline vaka özeti">
+            <h2 class="section-title storyline-heading">Storyline — Olay örgüsü özeti</h2>
+            <p class="storyline-deck">
+                Bu bölüm <strong>yürütülmüş analiz şeridini</strong> özetler: AI analist girişi, kill chain ilerlemesi,
+                çok katmanlı dikey zaman çizgisi ve merkez uç odaklı ilişki şeması.
+                Estetik hedefi <strong>Magnet AXIOM</strong> kurumsal rapor düzeni; teknik yoğunluk <strong>SANS Institute</strong>
+                olay raporlama disiplini ile uyumludur (izlenebilir kanıt + safha mantığı).
+            </p>
+
+            <div class="storyline-block narrative-block">
+                <h3 class="storyline-sub">Giriş — AI analist özeti</h3>
+                <div class="storyline-narrative-box">{{ storyline_narrative_html | safe }}</div>
+            </div>
+
+            <div class="storyline-block">
+                <h3 class="storyline-sub">Hikaye akışı — analist gözüyle (vaka şeridi)</h3>
+                <p class="storyline-caption">Aşağıdaki satırlar önemli olaylardan türetilmiştir; PDF çıktısında hızlı okuma için saat ve kaynak katmanı vurgulanır.</p>
+                {% if story_flow_lines and story_flow_lines|length > 0 %}
+                <ul class="story-flow-list">
+                    {% for line in story_flow_lines %}
+                    <li>{{ line }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="plot-fallback">Hikaye akışı için zaman damgalı olay veya mobil/bulut girdisi yetersiz.</p>
+                {% endif %}
+            </div>
+
+            <div class="storyline-block">
+                <h3 class="storyline-sub">Görsel 1 — Saldırı safhası (Kill Chain: Keşif → Sızma → Sızıntı)</h3>
+                <p class="storyline-caption">Otomatik triyaj; olay verisi, ağ özeti ve çoklu korelasyon sinyallerine göre üretilmiştir.</p>
+                <div class="kill-chain-3-row" role="list">
+                    {% for step in kill_chain.steps %}
+                    <div class="kill-chain-3-step {% if step.done %}kc3-done{% endif %} {% if step.current %}kc3-cur{% endif %}" role="listitem">
+                        <span class="kc3-mark">{% if step.done %}&#10003;{% elif step.current %}&#9678;{% else %}&#9675;{% endif %}</span>
+                        <span class="kc3-lbl">{{ step.label }}</span>
+                    </div>
+                    {% if not loop.last %}<div class="kc3-connector {% if kill_chain.current_index > loop.index0 %}kc3-on{% endif %}" aria-hidden="true"></div>{% endif %}
+                    {% endfor %}
+                </div>
+                <p class="kill-chain-foot"><strong>Aktif vurgu:</strong> {{ kill_chain.current_label_tr }} — {{ kill_chain.summary_tr }}</p>
+            </div>
+
+            <div class="storyline-block">
+                <h3 class="storyline-sub">Görsel 2 — Dikey olay örgüsü (Mobil · Disk · RAM · Bulut · Ağ)</h3>
+                <p class="storyline-caption">Zaman sırasına göre seçilmiş üst olaylar; PDF çıktısında etiketler sabittir.</p>
+                {% if not storyline_vertical_timeline %}
+                <p class="plot-fallback">Dikey örgü için zaman damgalı olay, bulut günlüğü veya mobil kanıt gerekir.</p>
+                {% else %}
+                <div class="vtimeline" role="list">
+                    {% for row in storyline_vertical_timeline %}
+                    <div class="vt-item level-{{ row.level_class }}" role="listitem">
+                        <div class="vt-glyph"><span class="vt-ico" aria-hidden="true">{{ row.icon | safe }}</span></div>
+                        <div class="vt-card">
+                            <div class="vt-meta"><span class="vt-lane">{{ row.lane }}</span> · <time>{{ row.time }}</time></div>
+                            <div class="vt-title">{{ row.title }}</div>
+                            {% if row.detail %}<div class="vt-detail">{{ row.detail }}</div>{% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="storyline-block">
+                <h3 class="storyline-sub">Görsel 3 — İlişki şeması (saldırgan / şüpheli uç · dosyalar · bulut kimliği)</h3>
+                <p class="storyline-caption">Merkez: şüpheli dış IP veya IAM kökü; sol: ayıklanan / volatile şüpheli dosya adayları; sağ: bulut kullanıcı eşlemesi (varsa).</p>
+                <div class="relationship-wrap">{{ relationship_diagram_svg | safe }}</div>
+            </div>
+            {{ analyst_note_block('storyline') }}
+        </section>
+
+        {% if mitre_progress %}
+        <section class="mitre-matrix" id="mitre-attack-progress" aria-label="MITRE ATT&CK matris ilerlemesi">
+            <h2>MITRE ATT&CK — Saldırı matrisi eşlemesi</h2>
+            <p style="margin:0; color:#c9d1d9; font-size:0.9rem; line-height:1.55;">
+                <strong style="color:#f0b429;">Saldırgan şu an matrisin şu aşamasında:</strong>
+                {% if mitre_progress.has_mitre %}
+                <span style="color:#7ee7ff;">{{ mitre_progress.furthest_tactic_name }}</span>
+                <code style="color:#8b949e; font-size:0.82rem;">({{ mitre_progress.furthest_tactic_id }})</code>
+                {% else %}
+                <span style="color:#8b949e;">{{ mitre_progress.headline_plain }}</span>
+                {% endif %}
+            </p>
+            {% if mitre_progress.has_mitre %}
+            <p style="margin:0.65rem 0 0 0; font-size:0.85rem; color:#c9d1d9;">{{ mitre_progress.headline_plain }}</p>
+            <div class="mitre-bar-wrap" title="Kurumsal ATT&CK sırasına göre en ileri görülen taktik — {{ mitre_progress.progress_percent }}%">
+                <div class="mitre-bar-fill" style="width: {{ mitre_progress.progress_percent }}%;"></div>
+            </div>
+            <div class="mitre-meta">
+                Aşama: {{ mitre_progress.furthest_stage_index + 1 }} / {{ mitre_progress.total_stages }}
+                · Benzersiz teknik göstergesi: <strong>{{ mitre_progress.techniques_touched }}</strong>
+                {% if mitre_progress.tactics_observed %}<span style="margin-left:0.5rem;">| Gözlenen taktikler:</span>{% endif %}
+            </div>
+            {% if mitre_progress.tactics_observed %}
+            <div style="margin-top:0.5rem;">
+                {% for t in mitre_progress.tactics_observed %}
+                <span class="mitre-tactic-pill">{{ t.tactic_id }} — {{ t.tactic_name }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endif %}
+            <p class="attribution" style="margin-top:0.85rem;">{{ mitre_progress.attribution }}</p>
+        </section>
+        {% endif %}
+        {{ analyst_note_block('mitre') }}
+
+        {% if expert_opinions and expert_opinions|length > 0 %}
+        <section class="expert-opinions" id="uzman-gorusu" aria-label="Uzman görüşü analist notları">
+            <h2>Uzman Görüşü — Analist Not Defteri</h2>
+            <p style="margin:0 0 1rem 0; font-size:0.82rem; color: var(--text-muted);">
+                Bu bölüm, DİZ arayüzündeki <strong>Analist Not Defteri</strong> (Timesketch benzeri işbirlikli triyaj)
+                kayıtlarından otomatik aktarılır. False positive ve kritik sızma emaresi kararları dava dosyasında açıkça görünür.
+            </p>
+            {% for op in expert_opinions %}
+            <div class="expert-card">
+                {% if op.badge_class == 'fp' %}
+                <span class="expert-badge expert-badge-fp">False positive</span>
+                {% elif op.badge_class == 'crit' %}
+                <span class="expert-badge expert-badge-crit">Kritik emare</span>
+                {% else %}
+                <span class="expert-badge expert-badge-note">Not</span>
+                {% endif %}
+                <div style="font-size:0.72rem; color:#8b949e; margin-bottom:0.35rem;">{{ op.label_tr }} · {{ op.created_at }}{% if op.analyst_name %} · {{ op.analyst_name }}{% endif %}</div>
+                {% set snap = op.finding_snapshot %}
+                <div class="expert-snap">
+                    <strong>{{ snap.Timestamp or "—" }}</strong> — {{ snap.Source or "—" }}<br/>
+                    <span style="color:#c9d1d9;">{{ snap.RuleTitle or "" }}</span><br/>
+                    <span style="color:#8b949e;">{{ snap.Details or "" }}</span>
+                </div>
+                {% if op.analyst_comment %}
+                <div class="expert-comment">{{ op.analyst_comment }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+        {{ analyst_note_block('expert') }}
+
+        <section class="critical-intro" id="kritik-bulgular">
+            <h2>KRİTİK BULGULAR — Çoklu korelasyon</h2>
+            <p style="margin:0 0 1rem 0; color:#c9d1d9; font-size:0.9rem;">
+                Aşağıda <strong>üçlü</strong> (Ağ + Bellek + Disk doğrulamalı veri sızıntısı),
+                <strong>bulut hesap ele geçirme</strong> (ATO) ve
+                <strong>dörtlü / tam saha</strong> (Mobil · Ağ · Bulut · Disk eşleşmesi) özetleri yer alır.
+                Tüm metinler maskeleme sonrasıdır.
+            </p>
+            <div class="corr-grid">
+                <div class="corr-card">
+                    <h3>Tam-Saha-Pres (Mobil–Ağ–Bulut–Disk)</h3>
+                    <div class="count">{{ full_spectrum_threats|length if full_spectrum_threats else 0 }}</div>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin:0.5rem 0 0 0;">APK/IPA veya mağaza sinyali + LAN hedefi + bulut admin API + lateral disk izi</p>
+                </div>
+                <div class="corr-card">
+                    <h3>Üçlü korelasyon (Exfiltration)</h3>
+                    <div class="count">{{ exfiltration_threats|length if exfiltration_threats else 0 }}</div>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin:0.5rem 0 0 0;">Yoğun dış trafik + malfind PID + disk Security Bypass / Service Install</p>
+                </div>
+                <div class="corr-card">
+                    <h3>Disk + RAM (Kesinleşmiş)</h3>
+                    <div class="count">{{ confirmed_threats|length if confirmed_threats else 0 }}</div>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin:0.5rem 0 0 0;">Aynı süreç/PID üzerinde günlük + bellek injeksiyonu eşleşmesi</p>
+                </div>
+                <div class="corr-card">
+                    <h3>Bulut ATO (Akıllı)</h3>
+                    <div class="count">{{ account_takeover_threats|length if account_takeover_threats else 0 }}</div>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin:0.5rem 0 0 0;">Zeek/AWS-Azure API + CloudTrail yetki + PowerShell bulut modülü</p>
+                </div>
+            </div>
+
+            <h3 style="color:#7ee7ff; font-size:0.98rem; margin:1.35rem 0 0.65rem 0;">Kanıt kaynağı → DİZ kararı (özet matris)</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin:0 0 0.5rem 0;">
+                Çok kanatlı vakada her kaynak için tespit edilen iz ve motor kararı. Kişisel veri içeren alanlar maskeleme sonrasıdır.
+            </p>
+            <table class="evidence-matrix">
+                <thead>
+                    <tr>
+                        <th>Kanıt Kaynağı</th>
+                        <th>Tespit Edilen İz</th>
+                        <th>DİZ&apos;in Kararı</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in evidence_matrix %}
+                    <tr>
+                        <td>{{ row.source }}</td>
+                        <td>{{ row.trace }}</td>
+                        <td class="decision">{{ row.decision }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if cross_alignment and cross_alignment.summary_tr %}
+            <h3 style="color:#58a6ff; font-size:0.95rem; margin:1.25rem 0 0.5rem 0;">Zaman damgası eşleştirmesi (5 kanat)</h3>
+            <div class="alignment-pre">{{ cross_alignment.summary_tr }}</div>
+            {% endif %}
+        </section>
+
+        {% if full_spectrum_threats %}
+        <div class="banner banner-fs">TOPYEKÜN SİBER SALDIRI (DİZ-Tam-Saha-Pres) — {{ full_spectrum_threats|length }} bulgu</div>
+        <div class="technical-summary">
+            {% for fs in full_spectrum_threats %}
+            <p><strong>{{ fs.get('label', fs.get('rule_title','')) }}</strong> — {{ fs.get('technical_summary', fs.get('details','')) }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if account_takeover_threats %}
+        <div class="banner banner-ato">BULUT HESABI ELE GEÇİRME (ATO) — {{ account_takeover_threats|length }} bulgu</div>
+        <div class="technical-summary">
+            {% for at in account_takeover_threats %}
+            <p><strong>{{ at.get('label','') }}</strong> — {{ at.get('technical_summary', at.get('details','')) }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if confirmed_threats %}
+        <div class="banner banner-conf">KESİNLEŞMİŞ TEHDİT (Disk + RAM) — {{ confirmed_threats|length }} bulgu</div>
+        {% endif %}
+
+        {% if exfiltration_threats %}
+        <div class="banner banner-exfil">KRİTİK VERİ SIZINTISI — Üçlü korelasyon — {{ exfiltration_threats|length }} bulgu</div>
+        <div class="technical-summary">
+            {% for et in exfiltration_threats %}
+            <p><strong>{{ et.get('label','') }}</strong> — {{ et.get('technical_summary', et.get('details','')) }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <h2 class="section-title">Saldırı haritası (zaman – kaynak katmanı)</h2>
+        <div class="attack-map-wrap">
+            <h3>Görsel özet — saldırı anı ve komşu olaylar</h3>
+            {% if attack_window_label %}<div class="attack-window">{{ attack_window_label }} <em>(* Mobil/Bulut satırları correlator çoklu kaynak kümesinden türetilir)</em></div>{% endif %}
+            {% if not swimlane_lanes %}<p class="plot-fallback">Saldırı haritası için parse edilebilir zaman damgalı olay yok.</p>{% endif %}
+            {% for lane in swimlane_lanes %}
+            <div class="swim-row">
+                <div class="swim-label">{{ lane }}</div>
+                <div class="swim-track">
+                    {% for m in swimlane_markers %}
+                    {% if m.lane == lane %}
+                    <div class="swim-marker level-{{ m.level_class }}" style="left: {{ m.left_pct }}%;" title="{{ m.time }} — {{ m.label }}">
+                        <span class="marker-tip">{{ m.time }}</span>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {{ analyst_note_block('attack_map') }}
+
+        <h2 class="section-title">İnteraktif saldırı zaman çizelgesi</h2>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Tarayıcıda yakınlaştırın (zoom); PDF çıktısında grafik statik olmayabilir — aşağıdaki tablo kanıt kaynağıdır.</p>
+        <div id="timeline-plot"></div>
+        <p id="timeline-fallback" class="plot-fallback" style="display:none;">Grafik verisi yok veya yüklenemedi.</p>
+        {{ analyst_note_block('timeline') }}
+
+        <h2 class="section-title">Birleşik olay tablosu (KVKK maskeli)</h2>
+        <p class="storyline-caption" style="margin-top:-0.35rem;">
+            <strong>Kritik çakışma:</strong> Aynı artifakt (dosya/süreç) hem disk günlüklerinde hem bellek analizinde geçen satırlar
+            <span class="collision-strip">DİSK+RAM</span> ile kalın ve kırmızı çerçeveli gösterilir; ayrıca motor <code>confirmed_threat</code> birleşenleri de bu kategoridedir.
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Zaman</th>
+                    <th>Kaynak</th>
+                    <th>Seviye</th>
+                    <th>ATT&amp;CK</th>
+                    <th>Başlık</th>
+                    <th>Detay</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in events %}
+                <tr class="level-{{ e.level_class }}{% if e.full_spectrum_threat %} full-spectrum-threat{% elif e.account_takeover_threat %} account-takeover-threat{% elif e.exfiltration_threat %} exfiltration-threat{% elif e.confirmed_threat %} confirmed-threat{% elif e.high_alert %} high-alert{% endif %}{% if e.disk_ram_collision %} disk-ram-collision{% endif %}">
+                    <td>{% if e.disk_ram_collision %}<span class="collision-strip" title="Disk + RAM çakışması">ÇAKIŞMA</span>{% endif %}{{ e.timestamp }}</td>
+                    <td>{{ e.source }}</td>
+                    <td><span class="level-badge badge-{{ e.level_class }}">{{ e.level }}</span></td>
+                    <td class="mitre-cell">{% if e.mitre_tags %}{% for m in e.mitre_tags %}<span class="mitre-chip" title="{{ m.technique_name }}">{{ m.technique_id }}</span>{% endfor %}{% else %}—{% endif %}</td>
+                    <td>{{ e.rule_title }}</td>
+                    <td class="details-cell">{{ e.details }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {{ analyst_note_block('events_table') }}
+
+        <section class="artifact-seal-section" id="kanit-dogrulama-ham" aria-label="Kanıt doğrulama tablosu">
+            <h2>Bütünlük mührü — Kanıt doğrulama tablosu</h2>
+            <p style="margin:0 0 1rem 0; font-size:0.82rem; color:#94a3b8; line-height:1.5;">
+                Aşağıdaki <strong>SHA-256</strong> değerleri, rapor üretim anında <code>data/results</code> altında bulunan
+                ham <strong>JSON</strong> ve <strong>CSV</strong> kanıt dosyalarının özetleridir. Rapor gövdesi ile karıştırmayın:
+                bu tablo <em>kaynak artifact</em> bütünlüğünü; sonraki bölümdeki özet ise <em>HTML çıktı</em> gövdesini doğrular.
+                Büyük dosyalar hash limiti nedeniyle satırda açıklanır.
+            </p>
+            {% if artifact_hash_rows and artifact_hash_rows|length > 0 %}
+            <table class="artifact-hash-table">
+                <thead>
+                    <tr>
+                        <th>Göreli yol</th>
+                        <th>Boyut (bayt)</th>
+                        <th>SHA-256</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ar in artifact_hash_rows %}
+                    <tr>
+                        <td>{{ ar.rel_path }}</td>
+                        <td>{{ ar.size_bytes }}</td>
+                        <td class="sha-cell">{{ ar.sha256 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="plot-fallback">Hash tablosu için sonuç dizininde JSON/CSV bulunamadı.</p>
+            {% endif %}
+            {{ analyst_note_block('artifact_seal') }}
+        </section>
+
+        <footer>
+            Dijital İz Sürücü (DİZ) — Vaka raporu #001 şablonu · Magnet AXIOM / Oxygen Forensics kalite hedefi · KVKK maskeleme: core/masking.py
+        </footer>
+    </div>
+
+    <script type="application/json" id="diz-plotly-spec">{{ plotly_timeline_json | safe }}</script>
+    <script>
+    (function() {
+        var elSpec = document.getElementById('diz-plotly-spec');
+        var spec = { data: [], layout: {} };
+        try { spec = JSON.parse(elSpec.textContent); } catch (e) {}
+        if (typeof Plotly !== 'undefined' && spec.data && spec.data.length) {
+            Plotly.newPlot('timeline-plot', spec.data, spec.layout, {responsive: true, displaylogo: false});
+        } else {
+            document.getElementById('timeline-fallback').style.display = 'block';
+        }
+    })();
+    </script>
+</body>
+</html>

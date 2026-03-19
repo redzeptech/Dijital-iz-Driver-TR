@@ -1,0 +1,169 @@
+{
+  "cluster_window_sec": 3900.0,
+  "entry_count": 11,
+  "clusters": [
+    {
+      "time_start_utc": "2025-03-19 13:12 UTC",
+      "time_end_utc": "13:25 UTC",
+      "sources_present": [
+        "cloud",
+        "disk",
+        "mobile",
+        "network",
+        "ram"
+      ],
+      "wing_count": 5,
+      "events": [
+        {
+          "source": "mobile",
+          "label": "WhatsApp",
+          "detail": "Sunucu canlı. C2 Server IP: 198.51.100.77 — payload'u buraya POST et, port 4444 açık.",
+          "time_utc": "2025-03-19 13:12:00"
+        },
+        {
+          "source": "disk",
+          "label": "PROCESS_MEMORY",
+          "detail": "PID: 4840 | Process: powershell.exe | PPID: 4120",
+          "time_utc": "2025-03-19 13:17:00"
+        },
+        {
+          "source": "ram",
+          "label": "pslist:powershell.exe",
+          "detail": "4840",
+          "time_utc": "2025-03-19 13:17:00"
+        },
+        {
+          "source": "disk",
+          "label": "KRİTİK VERİ SIZINTISI (EXFILTRATION)",
+          "detail": "Dış IP: 198.51.100.77 | 524,353,536 byte | Gizli PID: {4840}",
+          "time_utc": "2025-03-19 13:18:00"
+        },
+        {
+          "source": "disk",
+          "label": "Suspicious PowerShell Download (Invoke-WebRequest)",
+          "detail": "CommandLine contains Invoke-WebRequest downloading payload from http://198.51.100.77:8080/stage2.ps1; Parent: powershell.exe; ProcessId: 4840; NewProcessId: 4840; Image: powershell.exe; Same session s",
+          "time_utc": "2025-03-19 13:18:33"
+        },
+        {
+          "source": "disk",
+          "label": "NETWORK_MEMORY",
+          "detail": "Local: 192.168.1.50:49152 -> Remote: 198.51.100.77:4444 | State: ESTABLISHED | PID: 4840 | Process: powershell.exe",
+          "time_utc": "2025-03-19 13:19:05"
+        },
+        {
+          "source": "ram",
+          "label": "netscan:powershell.exe",
+          "detail": "198.51.100.77",
+          "time_utc": "2025-03-19 13:19:05"
+        },
+        {
+          "source": "network",
+          "label": "conn->198.51.100.77",
+          "detail": "orig_bytes=524288000",
+          "time_utc": "2025-03-19 13:20:00"
+        },
+        {
+          "source": "cloud",
+          "label": "DeleteSnapshot",
+          "detail": "DeleteSnapshot (EBS snapshot) from 198.51.100.77 as Root",
+          "time_utc": "2025-03-19 13:25:07"
+        },
+        {
+          "source": "cloud",
+          "label": "DeleteSnapshot",
+          "detail": "DeleteSnapshot (EBS snapshot) from 198.51.100.77 as Root",
+          "time_utc": "2025-03-19 13:25:07"
+        },
+        {
+          "source": "cloud",
+          "label": "DeleteSnapshot",
+          "detail": "DeleteSnapshot (EBS snapshot) from 198.51.100.77 as Root",
+          "time_utc": "2025-03-19 13:25:07"
+        }
+      ]
+    }
+  ],
+  "ranked_by_coverage": [
+    {
+      "time_start_utc": "2025-03-19 13:12 UTC",
+      "time_end_utc": "13:25 UTC",
+      "sources_present": [
+        "cloud",
+        "disk",
+        "mobile",
+        "network",
+        "ram"
+      ],
+      "wing_count": 5,
+      "events": [
+        {
+          "source": "mobile",
+          "label": "WhatsApp",
+          "detail": "Sunucu canlı. C2 Server IP: 198.51.100.77 — payload'u buraya POST et, port 4444 açık.",
+          "time_utc": "2025-03-19 13:12:00"
+        },
+        {
+          "source": "disk",
+          "label": "PROCESS_MEMORY",
+          "detail": "PID: 4840 | Process: powershell.exe | PPID: 4120",
+          "time_utc": "2025-03-19 13:17:00"
+        },
+        {
+          "source": "ram",
+          "label": "pslist:powershell.exe",
+          "detail": "4840",
+          "time_utc": "2025-03-19 13:17:00"
+        },
+        {
+          "source": "disk",
+          "label": "KRİTİK VERİ SIZINTISI (EXFILTRATION)",
+          "detail": "Dış IP: 198.51.100.77 | 524,353,536 byte | Gizli PID: {4840}",
+          "time_utc": "2025-03-19 13:18:00"
+        },
+        {
+          "source": "disk",
+          "label": "Suspicious PowerShell Download (Invoke-WebRequest)",
+          "detail": "CommandLine contains Invoke-WebRequest downloading payload from http://198.51.100.77:8080/stage2.ps1; Parent: powershell.exe; ProcessId: 4840; NewProcessId: 4840; Image: powershell.exe; Same session s",
+          "time_utc": "2025-03-19 13:18:33"
+        },
+        {
+          "source": "disk",
+          "label": "NETWORK_MEMORY",
+          "detail": "Local: 192.168.1.50:49152 -> Remote: 198.51.100.77:4444 | State: ESTABLISHED | PID: 4840 | Process: powershell.exe",
+          "time_utc": "2025-03-19 13:19:05"
+        },
+        {
+          "source": "ram",
+          "label": "netscan:powershell.exe",
+          "detail": "198.51.100.77",
+          "time_utc": "2025-03-19 13:19:05"
+        },
+        {
+          "source": "network",
+          "label": "conn->198.51.100.77",
+          "detail": "orig_bytes=524288000",
+          "time_utc": "2025-03-19 13:20:00"
+        },
+        {
+          "source": "cloud",
+          "label": "DeleteSnapshot",
+          "detail": "DeleteSnapshot (EBS snapshot) from 198.51.100.77 as Root",
+          "time_utc": "2025-03-19 13:25:07"
+        },
+        {
+          "source": "cloud",
+          "label": "DeleteSnapshot",
+          "detail": "DeleteSnapshot (EBS snapshot) from 198.51.100.77 as Root",
+          "time_utc": "2025-03-19 13:25:07"
+        },
+        {
+          "source": "cloud",
+          "label": "DeleteSnapshot",
+          "detail": "DeleteSnapshot (EBS snapshot) from 198.51.100.77 as Root",
+          "time_utc": "2025-03-19 13:25:07"
+        }
+      ]
+    }
+  ],
+  "summary_tr": "Çok kaynaklı zaman kümesi (correlator):\n- 2025-03-19 13:12 UTC–13:25 UTC: kanallar=cloud,disk,mobile,network,ram (5 farklı kaynak)"
+}

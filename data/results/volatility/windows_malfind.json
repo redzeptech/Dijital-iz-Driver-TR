@@ -1,0 +1,12 @@
+[
+  {
+    "PID": 4840,
+    "Process": "powershell.exe",
+    "ProcessId": 4840,
+    "ImageFileName": "powershell.exe",
+    "Offset": "0x1a2b3000",
+    "Disassembly": "0x1000 nopsled; possible shellcode entry",
+    "Hexdump": "90 90 eb fe cc 90 90 eb fe cc 90 90 eb fe cc 90 90 eb fe cc 90 90 eb fe cc 90 90 eb fe cc 90 90 eb fe cc 90 90 eb fe cc",
+    "Protection": "PAGE_EXECUTE_READWRITE"
+  }
+]

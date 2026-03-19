@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "notes": [
+    {
+      "fingerprint": "a1c5ed5d956e36ca68073fdefe0d241edbb3b3fa7eb105ffba8e3b73f51c6fc8",
+      "classification": "false_positive",
+      "label_tr": "Bu bir False Positive (uzman triyajı)",
+      "analyst_comment": "test",
+      "analyst_name": "Analist",
+      "finding_snapshot": {
+        "Timestamp": "2024-01-15 10:00:00",
+        "Source": "Hayabusa",
+        "RuleTitle": "Brute",
+        "Details": "x"
+      },
+      "mask_sensitive_at_save": false,
+      "created_at": "2026-03-19 20:37:51 UTC"
+    }
+  ]
+}

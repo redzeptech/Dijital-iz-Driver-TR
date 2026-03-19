@@ -1,0 +1,12 @@
+[
+  {
+    "PID": 4840,
+    "Process": "powershell.exe",
+    "LocalAddress": "192.168.1.50",
+    "RemoteAddress": "198.51.100.77",
+    "LocalPort": 49152,
+    "RemotePort": 4444,
+    "State": "ESTABLISHED",
+    "CreateTime": "2025-03-19 13:19:05"
+  }
+]
